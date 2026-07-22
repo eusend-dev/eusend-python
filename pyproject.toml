@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eusend"
+version = "0.1.0"
+description = "Official Python SDK for the Eusend API — the EU-native transactional email platform."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "Eusend" }]
+keywords = ["eusend", "email", "transactional-email", "smtp", "api"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+]
+dependencies = [
+    # Only for typing helpers (TypedDict/NotRequired) on older Pythons; no
+    # runtime HTTP dependencies — the transport is built on the standard library.
+    "typing_extensions>=4.0",
+]
+
+[project.urls]
+Homepage = "https://eusend.dev"
+Documentation = "https://eusend.dev/docs"
+Source = "https://github.com/eusend-dev/eusend-python"
+Issues = "https://github.com/eusend-dev/eusend-python/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["eusend"]
