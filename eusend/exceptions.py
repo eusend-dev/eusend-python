@@ -131,6 +131,7 @@ ERRORS: Dict[str, Type[EusendError]] = {
     "NOT_FOUND": NotFoundError,
     "VALIDATION_ERROR": ValidationError,
     "BAD_REQUEST": ValidationError,
+    "PAYLOAD_TOO_LARGE": ValidationError,
     "CONFLICT": EusendError,
     "RATE_LIMITED": RateLimitError,
     "MONTHLY_LIMIT_EXCEEDED": RateLimitError,
