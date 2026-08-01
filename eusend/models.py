@@ -45,10 +45,13 @@ class EmailListItem(_EmailFrom):
     created_at: str
 
 
-class DnsRecord(TypedDict):
+class DnsRecord(TypedDict, total=False):
     type: str
     name: str
     value: str
+    priority: int  # MX records only
+    purpose: str  # authentication | policy | alignment
+    description: str
 
 
 class Domain(TypedDict):

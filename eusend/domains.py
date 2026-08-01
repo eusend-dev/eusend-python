@@ -10,8 +10,11 @@ class Domains:
     class CreateResponse(TypedDict):
         id: str
         name: str
+        # Every record to publish, in presentation order. Prefer this over the
+        # individual keys below — it is the only place the optional Return-Path
+        # alignment records appear.
+        records: list[DnsRecord]
         dkim: DnsRecord
-        spf: DnsRecord
         dmarc: DnsRecord
 
     class DomainListItem(TypedDict):
