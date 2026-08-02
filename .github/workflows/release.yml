@@ -1,0 +1,66 @@
+name: release
+
+# Publishes eusend to PyPI. Pushing a `v*` tag is the trigger; the tag is made from the eusend
+# monorepo with `bun run sdk:release python patch`, which bumps pyproject.toml and
+# eusend/version.py together before tagging.
+#
+# Uploads use PyPI Trusted Publishing (OIDC) — no API token lives in this repo's secrets. The
+# trust is configured on pypi.org against this repo AND this filename, so renaming this file
+# breaks publishing until the trusted publisher is updated to match.
+
+on:
+  push:
+    tags: ['v*']
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # The OIDC token PyPI exchanges for a short-lived upload token.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # The version is written in two files and read at runtime for the User-Agent, so a
+      # mismatch here would misreport the client version in our own delivery logs. PyPI will
+      # not let a wrong version be replaced once uploaded — catching it now is the only chance.
+      - name: Tag must match the version in the source
+        run: |
+          python - "$GITHUB_REF_NAME" <<'PY'
+          import pathlib, re, sys
+
+          tag = sys.argv[1].removeprefix("v")
+          sources = {
+              "pyproject.toml": r'^version = "([^"]+)"',
+              "eusend/version.py": r'return "([^"]+)"',
+          }
+
+          failed = False
+          for path, pattern in sources.items():
+              found = re.search(pattern, pathlib.Path(path).read_text(), re.M)
+              if found is None:
+                  print(f"::error::no version found in {path}")
+                  failed = True
+              elif found.group(1) != tag:
+                  print(f"::error::{path} says {found.group(1)}, tag says {tag}")
+                  failed = True
+
+          sys.exit(1 if failed else 0)
+          PY
+
+      - name: Build
+        run: |
+          python -m pip install --upgrade build
+          python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
