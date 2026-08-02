@@ -200,6 +200,42 @@ eusend.Audiences.remove(audience["id"])
 
 ---
 
+## Suppressions
+
+Addresses the account will not send to. Hard bounces and spam complaints are added
+automatically; these methods cover the ones you manage yourself. A send to a suppressed
+address is skipped and recorded with status `suppressed`; if every recipient is
+suppressed the send fails with `ALL_SUPPRESSED`.
+
+Test-mode keys can read the list but not modify it.
+
+```python
+# Everything suppressed for a hard bounce, or at one domain
+page = eusend.Suppressions.list({"reason": "bounce", "limit": 50})
+eusend.Suppressions.list({"email": "@acme.com"})
+
+# Suppress an address. Already suppressed? The existing entry comes back unchanged —
+# a manual add never rewrites a real bounce or complaint.
+eusend.Suppressions.create({"email": "opted-out@example.com"})
+
+# Import up to 1,000 at a time — do this before your first send when migrating, so
+# addresses that already bounced elsewhere don't get a fresh attempt from a new IP.
+# (Named import_list because `import` is a Python keyword.)
+res = eusend.Suppressions.import_list([
+    "one@example.com",
+    {"email": "two@example.com", "reason": "complaint"},
+])
+print(res["count"], res["already_suppressed"], res["duplicates"])
+
+# Un-suppress by entry id or by address
+eusend.Suppressions.remove("invalid@example.com")
+
+# The whole list as CSV (bytes)
+csv = eusend.Suppressions.export()
+```
+
+---
+
 ## Templates
 
 `{{variable}}` placeholders are substituted at send time; values are HTML-escaped.
