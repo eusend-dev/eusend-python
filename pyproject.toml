@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "eusend"
-version = "0.2.0"
+version = "0.2.1"
 description = "Official Python SDK for the Eusend API — the EU-native transactional email platform."
 readme = "README.md"
 requires-python = ">=3.8"

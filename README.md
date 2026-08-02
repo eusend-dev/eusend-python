@@ -327,6 +327,8 @@ Exception classes: `MissingApiKeyError`, `InvalidApiKeyError`, `ValidationError`
 | `PLAN_LIMIT_EXCEEDED` | 403 | `EusendError` |
 | `DOMAIN_NOT_VERIFIED` | 403 | `EusendError` |
 | `SENDING_SUSPENDED` | 403 | `EusendError` |
+| `LIST_SEND_HELD` | 403 | `EusendError` |
+| `BROADCAST_HELD` | 403 | `EusendError` |
 | `ALL_SUPPRESSED` | 422 | `EusendError` |
 | `SERVICE_PAUSED` | 503 | `EusendError` |
 | `INTERNAL_ERROR` | 500 | `ApplicationError` |

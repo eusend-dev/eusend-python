@@ -139,6 +139,9 @@ ERRORS: Dict[str, Type[EusendError]] = {
     "PLAN_LIMIT_EXCEEDED": EusendError,
     "DOMAIN_NOT_VERIFIED": EusendError,
     "SENDING_SUSPENDED": EusendError,
+    # Awaiting human review, not a rate limit — retrying does not clear either of these.
+    "LIST_SEND_HELD": EusendError,
+    "BROADCAST_HELD": EusendError,
     "ALL_SUPPRESSED": EusendError,
     "ATTACHMENT_STORAGE_ERROR": EusendError,
     "SERVICE_PAUSED": EusendError,
