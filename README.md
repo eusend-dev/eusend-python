@@ -170,6 +170,21 @@ eusend.ApiKeys.remove(key["id"])
 
 Emails sent with a test key are accepted and tracked but never delivered.
 
+`permission` defaults to `FULL_ACCESS` — every resource. `SENDING_ACCESS` limits the key to
+sending email (plus rescheduling and canceling a scheduled send); every other endpoint,
+including reading email logs, returns `403 FORBIDDEN`. Such a key can also be pinned to one
+sending domain with `domain_id`, which is rejected on a full-access key.
+
+```python
+eusend.ApiKeys.create({
+    "name": "Billing service",
+    "permission": eusend.SENDING_ACCESS,
+    "domain_id": domain_id,  # omit for any verified domain
+})
+```
+
+Deleting a domain revokes every key restricted to it.
+
 ---
 
 ## Audiences & contacts

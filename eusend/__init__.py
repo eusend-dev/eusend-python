@@ -30,7 +30,7 @@ from eusend.version import get_version  # noqa: E402
 from eusend.emails import Emails  # noqa: E402
 from eusend.batch import Batch  # noqa: E402
 from eusend.domains import Domains  # noqa: E402
-from eusend.api_keys import ApiKeys  # noqa: E402
+from eusend.api_keys import FULL_ACCESS, SENDING_ACCESS, ApiKeys  # noqa: E402
 from eusend.audiences import Audiences  # noqa: E402
 from eusend.templates import Templates  # noqa: E402
 from eusend.webhooks import Webhooks  # noqa: E402
@@ -57,6 +57,8 @@ __all__ = [
     "Batch",
     "Domains",
     "ApiKeys",
+    "FULL_ACCESS",
+    "SENDING_ACCESS",
     "Audiences",
     "Templates",
     "Webhooks",
