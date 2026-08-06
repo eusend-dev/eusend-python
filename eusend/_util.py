@@ -34,7 +34,9 @@ def build_query(params: Optional[Dict[str, Any]]) -> str:
         if isinstance(value, bool):
             value = "true" if value else "false"
         q[key] = value
-    return "?" + urlencode(q) if q else ""
+    # doseq expands a list value into repeated params (``tag=a&tag=b``), which the
+    # /emails tag filter uses to AND several filters. Scalars are unaffected.
+    return "?" + urlencode(q, doseq=True) if q else ""
 
 
 def _encode_attachment(att: Dict[str, Any]) -> Dict[str, Any]:

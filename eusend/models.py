@@ -29,6 +29,8 @@ class Email(_EmailFrom):
     html: str
     text: str
     status: str
+    # Always a dict, ``{}`` when the send carried no tags.
+    tags: Dict[str, str]
     test_mode: bool
     template_id: str
     scheduled_at: str
@@ -41,6 +43,7 @@ class EmailListItem(_EmailFrom):
     to: List[str]
     subject: str
     status: str
+    tags: Dict[str, str]
     test_mode: bool
     created_at: str
 

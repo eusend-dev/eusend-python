@@ -29,6 +29,11 @@ class _SendParamsDefault(_SendParamsFrom):
     template_id: NotRequired[str]
     variables: NotRequired[Dict[str, Any]]
     headers: NotRequired[Dict[str, str]]
+    # Labels for log filtering and webhook routing, e.g. {"category": "password_reset"}.
+    # The [{"name": ..., "value": ...}] form is accepted too, for Resend-compatible
+    # payloads. Names and values may contain ASCII letters, numbers, underscores and
+    # dashes; up to 10 tags per email. Returned on every email.* webhook event.
+    tags: NotRequired[Union[Dict[str, str], List[Dict[str, str]]]]
     track_opens: NotRequired[bool]
     track_clicks: NotRequired[bool]
     attachments: NotRequired[List[Attachment]]
@@ -44,6 +49,9 @@ class _ListParamsDefault(_ListParamsFrom):
     cursor: NotRequired[str]
     status: NotRequired[str]
     to: NotRequired[str]
+    # "category:password_reset" matches that exact pair; a bare "category" matches any
+    # email carrying the tag. A list ANDs several filters.
+    tag: NotRequired[Union[str, List[str]]]
 
 
 class Emails:
@@ -95,7 +103,7 @@ class Emails:
 
     @classmethod
     def list(cls, params: Optional["Emails.ListParams"] = None) -> "Emails.ListResponse":
-        """List emails, most recent first. Filter by ``status``, ``from``, ``to``."""
+        """List emails, most recent first. Filter by ``status``, ``from``, ``to``, ``tag``."""
         path = "/emails" + build_query(cast(Optional[Dict[str, Any]], params))
         return Request[Emails.ListResponse](path=path, verb="get").perform_with_content()
 
