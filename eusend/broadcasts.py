@@ -18,6 +18,9 @@ class Broadcasts:
         html: NotRequired[str]
         template_id: NotRequired[str]
         template_variables: NotRequired[Dict[str, str]]
+        # Omit to use the organization default; False always wins over it.
+        track_opens: NotRequired[bool]
+        track_clicks: NotRequired[bool]
 
     class UpdateParams(_BroadcastFromOpt):
         name: NotRequired[str]
@@ -27,6 +30,9 @@ class Broadcasts:
         template_id: NotRequired[str]
         template_variables: NotRequired[Dict[str, str]]
         scheduled_at: NotRequired[str]
+        # Omit to leave the broadcast's current setting unchanged.
+        track_opens: NotRequired[bool]
+        track_clicks: NotRequired[bool]
 
     class SendParams(TypedDict):
         scheduled_at: NotRequired[str]

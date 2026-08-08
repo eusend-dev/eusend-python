@@ -58,7 +58,7 @@ On failure, methods raise `eusend.EusendError` (see [Error handling](#error-hand
 | `template_id` | `str` | Saved template. |
 | `variables` | `dict` | Template substitutions (HTML-escaped). |
 | `headers` | `dict[str, str]` | No line breaks in names or values. |
-| `track_opens` / `track_clicks` | `bool` | Default `True`. |
+| `track_opens` / `track_clicks` | `bool` | Omit to use your organization default (Settings → General → Email tracking). |
 | `attachments` | `list[Attachment]` | See below. Up to 20, 10 MB combined. |
 | `scheduled_at` | `str` | Future send, ≤ 30 days. |
 
