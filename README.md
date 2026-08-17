@@ -49,18 +49,18 @@ On failure, methods raise `eusend.EusendError` (see [Error handling](#error-hand
 
 `from` and `to` are required; provide at least one of `html`, `text`, or `template_id`.
 
-| Key | Type | Notes |
-|-----|------|-------|
-| `from` | `str` | Verified domain; bare or display-name form. |
-| `to` `cc` `bcc` `reply_to` | `str \| list[str]` | Max 50 each. |
-| `subject` | `str` | |
-| `html` / `text` | `str` | |
-| `template_id` | `str` | Saved template. |
-| `variables` | `dict` | Template substitutions (HTML-escaped). |
-| `headers` | `dict[str, str]` | No line breaks in names or values. |
-| `track_opens` / `track_clicks` | `bool` | Omit to use your organization default (Settings → General → Email tracking). |
-| `attachments` | `list[Attachment]` | See below. Up to 20, 10 MB combined. |
-| `scheduled_at` | `str` | Future send, ≤ 30 days. |
+| Key                            | Type               | Notes                                                                        |
+| ------------------------------ | ------------------ | ---------------------------------------------------------------------------- |
+| `from`                         | `str`              | Verified domain; bare or display-name form.                                  |
+| `to` `cc` `bcc` `reply_to`     | `str \| list[str]` | Max 50 each.                                                                 |
+| `subject`                      | `str`              |                                                                              |
+| `html` / `text`                | `str`              |                                                                              |
+| `template_id`                  | `str`              | Saved template.                                                              |
+| `variables`                    | `dict`             | Template substitutions (HTML-escaped).                                       |
+| `headers`                      | `dict[str, str]`   | No line breaks in names or values.                                           |
+| `track_opens` / `track_clicks` | `bool`             | Omit to use your organization default (Settings → General → Email tracking). |
+| `attachments`                  | `list[Attachment]` | See below. Up to 20, 10 MB combined.                                         |
+| `scheduled_at`                 | `str`              | Future send, ≤ 30 days.                                                      |
 
 ### Attachments
 
@@ -365,25 +365,25 @@ Exception classes: `MissingApiKeyError`, `InvalidApiKeyError`, `ValidationError`
 `NotFoundError`, `RateLimitError`, `ApplicationError` — all subclasses of
 `EusendError`. Branch on `e.code`:
 
-| Code | Status | Exception |
-|------|--------|-----------|
-| `UNAUTHORIZED` | 401 | `InvalidApiKeyError` |
-| `FORBIDDEN` | 403 | `EusendError` |
-| `NOT_FOUND` | 404 | `NotFoundError` |
-| `VALIDATION_ERROR` / `BAD_REQUEST` | 400 | `ValidationError` |
-| `CONFLICT` | 409 | `EusendError` |
-| `RATE_LIMITED` | 429 | `RateLimitError` |
-| `MONTHLY_LIMIT_EXCEEDED` | 429 | `RateLimitError` |
-| `DAILY_LIMIT_EXCEEDED` | 429 | `RateLimitError` |
-| `PLAN_LIMIT_EXCEEDED` | 403 | `EusendError` |
-| `DOMAIN_NOT_VERIFIED` | 403 | `EusendError` |
-| `SENDING_SUSPENDED` | 403 | `EusendError` |
-| `LIST_SEND_HELD` | 403 | `EusendError` |
-| `BROADCAST_HELD` | 403 | `EusendError` |
-| `ALL_SUPPRESSED` | 422 | `EusendError` |
-| `SERVICE_PAUSED` | 503 | `EusendError` |
-| `INTERNAL_ERROR` | 500 | `ApplicationError` |
-| `application_error` | — | `ApplicationError` (network failure) |
+| Code                               | Status | Exception                            |
+| ---------------------------------- | ------ | ------------------------------------ |
+| `UNAUTHORIZED`                     | 401    | `InvalidApiKeyError`                 |
+| `FORBIDDEN`                        | 403    | `EusendError`                        |
+| `NOT_FOUND`                        | 404    | `NotFoundError`                      |
+| `VALIDATION_ERROR` / `BAD_REQUEST` | 400    | `ValidationError`                    |
+| `CONFLICT`                         | 409    | `EusendError`                        |
+| `RATE_LIMITED`                     | 429    | `RateLimitError`                     |
+| `MONTHLY_LIMIT_EXCEEDED`           | 429    | `RateLimitError`                     |
+| `DAILY_LIMIT_EXCEEDED`             | 429    | `RateLimitError`                     |
+| `PLAN_LIMIT_EXCEEDED`              | 403    | `EusendError`                        |
+| `DOMAIN_NOT_VERIFIED`              | 403    | `EusendError`                        |
+| `SENDING_SUSPENDED`                | 403    | `EusendError`                        |
+| `LIST_SEND_HELD`                   | 403    | `EusendError`                        |
+| `BROADCAST_HELD`                   | 403    | `EusendError`                        |
+| `ALL_SUPPRESSED`                   | 422    | `EusendError`                        |
+| `SERVICE_PAUSED`                   | 503    | `EusendError`                        |
+| `INTERNAL_ERROR`                   | 500    | `ApplicationError`                   |
+| `application_error`                | —      | `ApplicationError` (network failure) |
 
 ---
 
