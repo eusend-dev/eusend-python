@@ -65,6 +65,13 @@ class Domain(TypedDict):
     status: str
     created_at: str
     verified_at: str
+    # Opt-in tracking subdomain (track.<domain>). tracking_status is one of "pending"
+    # (opted in, waiting for the CNAME), "provisioning" (CNAME found, certificate not
+    # serving yet) or "active" (tracked links in new messages use your domain). Sending
+    # is unaffected at every stage.
+    tracking_enabled: bool
+    tracking_status: str
+    tracking_activated_at: str
 
 
 class Contact(TypedDict):

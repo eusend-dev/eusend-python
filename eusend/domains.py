@@ -21,7 +21,17 @@ class Domains:
         id: str
         name: str
         status: str
+        tracking_enabled: bool
+        tracking_status: str
         created_at: str
+
+    class TrackingResponse(TypedDict):
+        id: str
+        name: str
+        tracking_enabled: bool
+        tracking_status: str
+        # Carries the tracking CNAME to publish when tracking was just enabled.
+        records: list[DnsRecord]
 
     @classmethod
     def create(cls, name: str) -> "Domains.CreateResponse":
@@ -46,3 +56,15 @@ class Domains:
     @classmethod
     def remove(cls, domain_id: str) -> None:
         Request(path=f"/domains/{domain_id}", verb="delete").perform()
+
+    @classmethod
+    def set_tracking(cls, domain_id: str, enabled: bool) -> "Domains.TrackingResponse":
+        """Opt in or out of serving open/click tracking from track.<domain>.
+
+        Enabling requires a verified domain and returns the CNAME to publish; tracked
+        links keep using the platform host until the record resolves and the subdomain
+        is confirmed serving. Disabling takes effect on the next message sent.
+        """
+        return Request[Domains.TrackingResponse](
+            path=f"/domains/{domain_id}/tracking", params={"enabled": enabled}, verb="patch"
+        ).perform_with_content()
