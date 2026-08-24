@@ -143,6 +143,9 @@ ERRORS: Dict[str, Type[EusendError]] = {
     "LIST_SEND_HELD": EusendError,
     "BROADCAST_HELD": EusendError,
     "ALL_SUPPRESSED": EusendError,
+    # A recipient domain publishes no mail exchanger — a content problem with the request,
+    # not a transient one, so it maps to ValidationError rather than a retryable class.
+    "RECIPIENT_DOMAIN_UNDELIVERABLE": ValidationError,
     "ATTACHMENT_STORAGE_ERROR": EusendError,
     "SERVICE_PAUSED": EusendError,
     "INTERNAL_ERROR": ApplicationError,
