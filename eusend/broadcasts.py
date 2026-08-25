@@ -52,6 +52,8 @@ class Broadcasts:
         recipient_count: Optional[int]
         sent_count: Optional[int]
         scheduled_at: Optional[str]
+        started_at: Optional[str]
+        completed_at: Optional[str]
         created_at: str
         audience_name: Optional[str]
 
