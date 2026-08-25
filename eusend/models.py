@@ -4,9 +4,9 @@ Responses are plain dicts at runtime (with snake_case keys); these types exist
 for editor/type-checker support. Access fields with ``resp["field"]``.
 """
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
-from eusend._compat import TypedDict
+from eusend._compat import NotRequired, TypedDict
 
 # `from` is a reserved keyword, so it is declared via functional TypedDict syntax.
 _EmailFrom = TypedDict("_EmailFrom", {"from": str})
@@ -111,14 +111,27 @@ class Webhook(TypedDict):
 
 class Broadcast(TypedDict):
     id: str
+    organization_id: str
     name: str
     status: str
-    audience_id: str
+    audience_id: Optional[str]
     from_address: str
+    reply_to: Optional[str]
     subject: str
-    html: str
-    template_id: str
-    template_variables: Dict[str, str]
-    scheduled_at: str
+    html: Optional[str]
+    react_source: Optional[str]
+    editor_json: Optional[Dict[str, Any]]
+    template_id: Optional[str]
+    template_variables: Optional[Dict[str, str]]
+    track_opens: bool
+    track_clicks: bool
+    held_reason: Optional[str]
+    scheduled_at: Optional[str]
+    started_at: Optional[str]
+    completed_at: Optional[str]
+    recipient_count: int
+    sent_count: int
     created_at: str
     updated_at: str
+    # Present on GET /broadcasts/:id only.
+    stats: NotRequired[Dict[str, int]]
