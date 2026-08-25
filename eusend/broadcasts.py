@@ -46,7 +46,7 @@ class Broadcasts:
         id: str
         name: str
         status: str
-        audience_id: str
+        audience_id: Optional[str]
         from_address: str
         subject: str
         recipient_count: Optional[int]

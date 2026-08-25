@@ -4,7 +4,7 @@ Responses are plain dicts at runtime (with snake_case keys); these types exist
 for editor/type-checker support. Access fields with ``resp["field"]``.
 """
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from eusend._compat import TypedDict
 
@@ -113,7 +113,7 @@ class Broadcast(TypedDict):
     id: str
     name: str
     status: str
-    audience_id: str
+    audience_id: Optional[str]
     from_address: str
     subject: str
     html: str
