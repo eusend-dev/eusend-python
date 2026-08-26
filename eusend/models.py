@@ -57,6 +57,13 @@ class DnsRecord(TypedDict, total=False):
     description: str
 
 
+class DomainVerification(TypedDict):
+    """Whether a verification chain is polling DNS for the domain right now."""
+
+    running: bool
+    started_at: str
+
+
 class Domain(TypedDict):
     id: str
     name: str
@@ -65,6 +72,7 @@ class Domain(TypedDict):
     status: str
     created_at: str
     verified_at: str
+    verification: DomainVerification
 
 
 class Contact(TypedDict):
