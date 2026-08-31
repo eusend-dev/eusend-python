@@ -58,6 +58,11 @@ class Audiences:
         data: List[Contact]
         next_cursor: Optional[str]
 
+    class BatchDeleteContactsResponse(TypedDict):
+        # May be lower than the number of ids sent -- an id may already be gone, or may
+        # belong to a different audience -- so a retry settles at 0 rather than failing.
+        deleted: int
+
     class BatchCreateContactsResponse(TypedDict):
         count: int
         # How many repeated addresses were collapsed to reach ``count`` -- what explains
@@ -100,6 +105,22 @@ class Audiences:
         return Request[Audiences.BatchCreateContactsResponse](
             path=f"/audiences/{audience_id}/contacts/batch",
             params={"contacts": cast(List[Any], contacts)},
+            verb="post",
+        ).perform_with_content()
+
+    @classmethod
+    def batch_delete_contacts(
+        cls, audience_id: str, contact_ids: List[str]
+    ) -> "Audiences.BatchDeleteContactsResponse":
+        """Delete up to 1,000 contacts from an audience by id.
+
+        Not an unsubscribe: it removes them from the audience without adding them to the
+        suppression list. Use ``update_contact`` with ``unsubscribed`` to stop mailing
+        somebody while keeping the record.
+        """
+        return Request[Audiences.BatchDeleteContactsResponse](
+            path=f"/audiences/{audience_id}/contacts/batch-delete",
+            params={"contact_ids": cast(Any, contact_ids)},
             verb="post",
         ).perform_with_content()
 
