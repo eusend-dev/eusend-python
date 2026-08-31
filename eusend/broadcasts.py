@@ -42,6 +42,20 @@ class Broadcasts:
         status: str
         scheduled_at: Optional[str]
 
+    class TestParams(TypedDict):
+        # Up to 5 addresses, each on a domain verified on your account. A test send
+        # delivers real mail without the paid-plan gate that ``send`` carries, so it is
+        # restricted to inboxes you have already proved you control; anything else
+        # returns DOMAIN_NOT_VERIFIED.
+        to: List[str]
+
+    class TestResponse(TypedDict):
+        id: str
+        # The addresses actually mailed, lowercased and de-duplicated.
+        sent_to: List[str]
+        # One email id per recipient, for looking the delivery up in the logs.
+        email_ids: List[str]
+
     class BroadcastListItem(TypedDict):
         id: str
         name: str
@@ -88,6 +102,23 @@ class Broadcasts:
         return Request[Broadcasts.SendResponse](
             path=f"/broadcasts/{broadcast_id}/send",
             params=cast(Dict[str, Any], params or {}),
+            verb="post",
+        ).perform_with_content()
+
+    @classmethod
+    def test(cls, broadcast_id: str, params: "Broadcasts.TestParams") -> "Broadcasts.TestResponse":
+        """Send a copy to your own verified addresses before the campaign goes out.
+
+        The real message through the real sending path, so it shows what a recipient will
+        see. Unlike ``send`` this works on every plan including Free. It costs daily and
+        monthly quota like any other send, and does not move the broadcast's status.
+
+        Requires a LIVE api key -- "test" here means a dress rehearsal, not a sandbox, so
+        an ``eu_test_`` key is refused because the mail really is delivered.
+        """
+        return Request[Broadcasts.TestResponse](
+            path=f"/broadcasts/{broadcast_id}/test",
+            params=cast(Dict[str, Any], params),
             verb="post",
         ).perform_with_content()
 
