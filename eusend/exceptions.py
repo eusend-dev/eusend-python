@@ -139,6 +139,12 @@ ERRORS: Dict[str, Type[EusendError]] = {
     "PLAN_LIMIT_EXCEEDED": EusendError,
     "DOMAIN_NOT_VERIFIED": EusendError,
     "SENDING_SUSPENDED": EusendError,
+    # Held pending human review, like the two below it — not a rate limit, and not
+    # something a retry clears.
+    "ACCOUNT_RESTRICTED": EusendError,
+    # The From display name is the problem, not the account: a corrected sender identity
+    # succeeds immediately, so this is a request-content error.
+    "SENDER_NOT_PERMITTED": ValidationError,
     # Awaiting human review, not a rate limit — retrying does not clear either of these.
     "LIST_SEND_HELD": EusendError,
     "BROADCAST_HELD": EusendError,
