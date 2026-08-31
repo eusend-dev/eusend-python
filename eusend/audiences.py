@@ -26,6 +26,23 @@ class Audiences:
         first_name: NotRequired[str]
         last_name: NotRequired[str]
 
+    class BatchContactParams(TypedDict):
+        """A contact in a bulk import.
+
+        Adds the two fields that only make sense when migrating a list in from another
+        provider. ``unsubscribed`` marks the contact opted out; an import can only ever
+        ADD an opt-out, so ``False`` will not re-subscribe somebody who has already
+        unsubscribed -- that is a consent decision and stays on ``update_contact``.
+        ``created_at`` (ISO 8601) applies on insert only; an existing contact keeps the
+        date it already has.
+        """
+
+        email: str
+        first_name: NotRequired[str]
+        last_name: NotRequired[str]
+        unsubscribed: NotRequired[bool]
+        created_at: NotRequired[str]
+
     class UpdateContactParams(TypedDict):
         first_name: NotRequired[str]
         last_name: NotRequired[str]
@@ -43,6 +60,9 @@ class Audiences:
 
     class BatchCreateContactsResponse(TypedDict):
         count: int
+        # How many repeated addresses were collapsed to reach ``count`` -- what explains
+        # a count lower than the number of rows sent.
+        duplicates: int
 
     # --- Audiences ---------------------------------------------------------
 
@@ -74,7 +94,7 @@ class Audiences:
 
     @classmethod
     def batch_create_contacts(
-        cls, audience_id: str, contacts: List["Audiences.CreateContactParams"]
+        cls, audience_id: str, contacts: List["Audiences.BatchContactParams"]
     ) -> "Audiences.BatchCreateContactsResponse":
         """Upsert up to 1,000 contacts; returns the number written."""
         return Request[Audiences.BatchCreateContactsResponse](
