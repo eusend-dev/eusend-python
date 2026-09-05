@@ -22,9 +22,20 @@ class Audiences:
         contact_count: int
 
     class CreateContactParams(TypedDict):
+        """Fields for a single contact.
+
+        ``properties`` are custom properties merged into the ``{{variable}}`` map when a
+        broadcast renders, so ``{"plan": "pro"}`` makes ``{{plan}}`` resolve to ``pro``.
+        Values are strings; keys are lowercase letters, digits and underscores, starting
+        with a letter (at most 40 characters, 20 properties per contact). ``email``,
+        ``name``, ``first_name``, ``last_name`` and ``full_name`` are built in and cannot
+        be used. Sending them REPLACES the contact's properties.
+        """
+
         email: str
         first_name: NotRequired[str]
         last_name: NotRequired[str]
+        properties: NotRequired[Dict[str, str]]
 
     class BatchContactParams(TypedDict):
         """A contact in a bulk import.
@@ -35,6 +46,10 @@ class Audiences:
         unsubscribed -- that is a consent decision and stays on ``update_contact``.
         ``created_at`` (ISO 8601) applies on insert only; an existing contact keeps the
         date it already has.
+
+        Unlike ``create_contact``, ``properties`` MERGE into whatever the contact already
+        has -- a CSV carrying only ``plan`` will not drop a ``company`` an earlier import
+        set. Use ``update_contact`` to replace the whole object.
         """
 
         email: str
@@ -42,11 +57,19 @@ class Audiences:
         last_name: NotRequired[str]
         unsubscribed: NotRequired[bool]
         created_at: NotRequired[str]
+        properties: NotRequired[Dict[str, str]]
 
     class UpdateContactParams(TypedDict):
+        """Fields to change. Omitted keys are left alone.
+
+        ``properties`` REPLACES the contact's custom properties; pass ``{}`` to clear
+        them. See :class:`CreateContactParams` for the naming rules.
+        """
+
         first_name: NotRequired[str]
         last_name: NotRequired[str]
         unsubscribed: NotRequired[bool]
+        properties: NotRequired[Dict[str, str]]
 
     class ListContactsParams(TypedDict):
         limit: NotRequired[int]

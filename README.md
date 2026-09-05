@@ -194,7 +194,15 @@ Contact operations are grouped under `Audiences` (they live under a specific aud
 ```python
 audience = eusend.Audiences.create("Newsletter")
 
-eusend.Audiences.create_contact(audience["id"], {"email": "user@example.com", "first_name": "Jane"})
+eusend.Audiences.create_contact(
+    audience["id"],
+    {
+        "email": "user@example.com",
+        "first_name": "Jane",
+        # Custom properties become {{plan}} in a broadcast body.
+        "properties": {"plan": "pro"},
+    },
+)
 
 # Bulk upsert (up to 1,000) → {"count": N}
 eusend.Audiences.batch_create_contacts(audience["id"], [

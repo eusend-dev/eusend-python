@@ -81,6 +81,8 @@ class Contact(TypedDict):
     email: str
     first_name: str
     last_name: str
+    #: Custom properties, available as ``{{key}}`` in a broadcast body.
+    properties: Dict[str, str]
     status: str
     unsubscribed_at: str
     created_at: str
