@@ -64,6 +64,37 @@ class DomainVerification(TypedDict):
     started_at: str
 
 
+class DomainDnsProvider(TypedDict):
+    """The DNS host serving the zone, recognised from its nameservers."""
+
+    id: str
+    label: str
+    #: Path to the guide for this panel on eusend.dev, or None where there is none.
+    guide: str
+
+
+class DomainDiagnostic(TypedDict):
+    """What the last unmatched DNS check found, when it found a mistake.
+
+    ``code`` is the mistake: ``doubled_domain`` (the record sits under the domain
+    twice, because the control panel appends it to whatever you type),
+    ``truncated_key`` (the value was cut at the 255-character limit for a single DNS
+    string instead of being split into two), ``foreign_key`` (a DKIM key we did not
+    issue is published at the selector), ``quoted_value``, ``multiple_records``,
+    ``cname_at_selector``. New codes may be added, so treat an unknown one as generic.
+    """
+
+    code: str
+    #: The name the record was actually found at, for ``doubled_domain``.
+    found_at: str
+    #: How much of the key is published, and how much there is, for ``truncated_key``.
+    published_chars: int
+    expected_chars: int
+    #: Where the CNAME points, for ``cname_at_selector``.
+    target: str
+    provider: DomainDnsProvider
+
+
 class Domain(TypedDict):
     id: str
     name: str
@@ -73,6 +104,8 @@ class Domain(TypedDict):
     created_at: str
     verified_at: str
     verification: DomainVerification
+    #: None while nothing is wrong beyond the records not having propagated yet.
+    diagnostic: DomainDiagnostic
 
 
 class Contact(TypedDict):
