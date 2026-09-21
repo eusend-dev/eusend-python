@@ -122,6 +122,19 @@ class Contact(TypedDict):
     updated_at: str
 
 
+class ContactProperty(TypedDict):
+    id: str
+    key: str
+    #: ``"string"`` or ``"number"``. Values are carried and rendered as strings either
+    #: way; the type is a write-time check, not a formatting instruction.
+    type: str
+    #: Substituted into ``{{key}}`` for contacts with no value of their own. ``None``
+    #: renders empty, which is what an unset property did before the registry existed.
+    fallback_value: Optional[str]
+    created_at: str
+    updated_at: str
+
+
 class Template(TypedDict):
     id: str
     name: str

@@ -221,6 +221,25 @@ eusend.Audiences.list()
 eusend.Audiences.remove(audience["id"])
 ```
 
+### Contact properties
+
+The custom fields your contacts carry. Declaring one is optional — a property you send on
+a contact registers itself as a string — but a declared property can have a type and a
+fallback rendered for contacts that have no value of their own.
+
+```python
+eusend.ContactProperties.create({"key": "plan", "type": "string", "fallback_value": "free"})
+
+properties = eusend.ContactProperties.list()
+eusend.ContactProperties.get(properties[0]["id"])
+
+# The fallback is the only mutable field: key and type are fixed at creation.
+eusend.ContactProperties.update(properties[0]["id"], {"fallback_value": "trial"})
+
+# Deletes the definition AND strips the key from every contact. Not undoable.
+eusend.ContactProperties.remove(properties[0]["id"])
+```
+
 ---
 
 ## Suppressions
