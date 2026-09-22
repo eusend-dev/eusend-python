@@ -14,6 +14,8 @@ class Broadcasts:
     class CreateParams(_BroadcastFrom):
         name: str
         audience_id: str
+        #: Narrows the audience to the contacts subscribed to this topic.
+        topic_id: NotRequired[str]
         subject: str
         html: NotRequired[str]
         template_id: NotRequired[str]
@@ -25,6 +27,8 @@ class Broadcasts:
     class UpdateParams(_BroadcastFromOpt):
         name: NotRequired[str]
         audience_id: NotRequired[str]
+        #: Pass None to clear the topic and widen the send back to the whole audience.
+        topic_id: NotRequired[Optional[str]]
         subject: NotRequired[str]
         html: NotRequired[str]
         template_id: NotRequired[str]
@@ -61,6 +65,8 @@ class Broadcasts:
         name: str
         status: str
         audience_id: Optional[str]
+        topic_id: Optional[str]
+        topic_name: Optional[str]
         from_address: str
         subject: str
         recipient_count: Optional[int]

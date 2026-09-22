@@ -15,7 +15,7 @@ from eusend.exceptions import (
 )
 from eusend.version import get_version
 
-RequestVerb = Literal["get", "post", "patch", "delete"]
+RequestVerb = Literal["get", "post", "put", "patch", "delete"]
 T = TypeVar("T")
 
 ParamsType = Union[Dict[str, Any], List[Any]]

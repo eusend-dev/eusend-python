@@ -33,6 +33,7 @@ from eusend.domains import Domains  # noqa: E402
 from eusend.api_keys import FULL_ACCESS, SENDING_ACCESS, ApiKeys  # noqa: E402
 from eusend.audiences import Audiences  # noqa: E402
 from eusend.contact_properties import ContactProperties  # noqa: E402
+from eusend.topics import Topic, Topics  # noqa: E402
 from eusend.templates import Templates  # noqa: E402
 from eusend.webhooks import Webhooks  # noqa: E402
 from eusend.broadcasts import Broadcasts  # noqa: E402
@@ -62,6 +63,8 @@ __all__ = [
     "SENDING_ACCESS",
     "Audiences",
     "ContactProperties",
+    "Topic",
+    "Topics",
     "Templates",
     "Webhooks",
     "Broadcasts",
