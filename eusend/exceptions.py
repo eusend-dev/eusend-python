@@ -142,6 +142,10 @@ ERRORS: Dict[str, Type[EusendError]] = {
     # Held pending human review, like the two below it — not a rate limit, and not
     # something a retry clears.
     "ACCOUNT_RESTRICTED": EusendError,
+    # An additional workspace with no live subscription. Not a RateLimitError despite the
+    # zero allowance behind it: nothing about this clears by waiting or by slowing down,
+    # and a client that backs off and retries on it will retry forever.
+    "WORKSPACE_INACTIVE": EusendError,
     # The From display name is the problem, not the account: a corrected sender identity
     # succeeds immediately, so this is a request-content error.
     "SENDER_NOT_PERMITTED": ValidationError,
