@@ -23,6 +23,11 @@ class Domains:
         status: str
         created_at: str
 
+    class RemoveResponse(TypedDict):
+        message: str
+        # Scheduled emails from the domain, canceled because it can no longer send them.
+        canceled_scheduled_emails: int
+
     @classmethod
     def create(cls, name: str) -> "Domains.CreateResponse":
         """Add a domain and return the DNS records to publish."""
@@ -44,5 +49,7 @@ class Domains:
         Request(path=f"/domains/{domain_id}/verify", verb="post").perform()
 
     @classmethod
-    def remove(cls, domain_id: str) -> None:
-        Request(path=f"/domains/{domain_id}", verb="delete").perform()
+    def remove(cls, domain_id: str) -> "Domains.RemoveResponse":
+        return Request[Domains.RemoveResponse](
+            path=f"/domains/{domain_id}", verb="delete"
+        ).perform_with_content()

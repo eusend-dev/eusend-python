@@ -124,6 +124,14 @@ for item in res["data"]:
     print(item.get("id") or f"{item['code']}: {item['error']}")
 ```
 
+Pass `options={"idempotency_key": ...}` as the second argument to retry a batch
+safely. The key is applied per item by position, so a retry must send the items in
+the same order.
+
+```python
+eusend.Batch.send(emails, options={"idempotency_key": f"digest-{run_id}"})
+```
+
 ### Retrieve & list
 
 ```python
@@ -152,7 +160,8 @@ print(created["spf"], created["dmarc"])
 eusend.Domains.verify(created["id"])   # after publishing the DNS records
 eusend.Domains.list()
 eusend.Domains.get(created["id"])
-eusend.Domains.remove(created["id"])
+removed = eusend.Domains.remove(created["id"])
+print(removed["canceled_scheduled_emails"])  # scheduled emails from the domain are canceled
 ```
 
 ---
@@ -218,6 +227,8 @@ eusend.Audiences.get_contact(audience["id"], contact["id"])
 eusend.Audiences.remove_contact(audience["id"], contact["id"])
 
 eusend.Audiences.list()
+eusend.Audiences.get(audience["id"])   # includes contact_count
+eusend.Audiences.update(audience["id"], {"name": "Product updates"})
 eusend.Audiences.remove(audience["id"])
 ```
 
@@ -319,7 +330,7 @@ eusend.Webhooks.remove(hook["id"])
 ```
 
 Events: `email.sent` `email.delivered` `email.bounced` `email.complained`
-`email.opened` `email.clicked`. The endpoint must be a public `http(s)` URL
+`email.opened` `email.clicked` `email.failed` `email.suppressed`. The endpoint must be a public `http(s)` URL
 returning `2xx` directly (redirects count as failures).
 
 ### Verifying signatures
@@ -351,6 +362,7 @@ bc = eusend.Broadcasts.create({
     "name": "May newsletter",
     "audience_id": audience["id"],
     "from": "Sivert <hello@yourdomain.com>",
+    "reply_to": "support@yourdomain.com",
     "subject": "May update",
     "html": "<p>Hi {{first_name}}, your monthly update is here...</p>",
 })

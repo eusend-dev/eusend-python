@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, cast
+from typing import Any, Dict, List, Optional, cast
 
 from eusend._compat import NotRequired, TypedDict
 
@@ -17,13 +17,19 @@ class Batch:
         data: List["Batch.BatchItemResult"]
 
     @classmethod
-    def send(cls, params: List[Emails.SendParams]) -> "Batch.SendResponse":
+    def send(
+        cls, params: List[Emails.SendParams], options: Optional[Emails.SendOptions] = None
+    ) -> "Batch.SendResponse":
         """Send up to 100 emails in one request.
 
         Attachments and scheduling are not supported on the batch endpoint and
         are stripped from each item — send those individually via ``Emails.send``.
         The result maps positionally to the input: queued items carry ``id``,
         rejected items carry ``error`` and ``code``.
+
+        Pass ``options={"idempotency_key": ...}`` to make the batch safe to retry. The
+        key is applied per item by position, so a retry must keep the items in the same
+        order.
         """
         payload = [
             prepare_email_payload(cast(Dict[str, Any], p), allow_scheduling=False) for p in params
@@ -32,4 +38,5 @@ class Batch:
             path="/emails/batch",
             params=cast(List[Any], payload),
             verb="post",
+            options=cast(Optional[Dict[str, Any]], options),
         ).perform_with_content()

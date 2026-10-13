@@ -16,6 +16,7 @@ class Broadcasts:
         audience_id: str
         #: Narrows the audience to the contacts subscribed to this topic.
         topic_id: NotRequired[str]
+        reply_to: NotRequired[str]
         subject: str
         html: NotRequired[str]
         template_id: NotRequired[str]
@@ -29,6 +30,8 @@ class Broadcasts:
         audience_id: NotRequired[str]
         #: Pass None to clear the topic and widen the send back to the whole audience.
         topic_id: NotRequired[Optional[str]]
+        #: Pass None to clear it, so replies go back to the sender.
+        reply_to: NotRequired[Optional[str]]
         subject: NotRequired[str]
         html: NotRequired[str]
         template_id: NotRequired[str]

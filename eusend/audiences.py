@@ -21,6 +21,16 @@ class Audiences:
         created_at: str
         contact_count: int
 
+    class AudienceDetail(TypedDict):
+        id: str
+        name: str
+        created_at: str
+        updated_at: str
+        contact_count: int
+
+    class UpdateParams(TypedDict):
+        name: str
+
     class CreateContactParams(TypedDict):
         """Fields for a single contact.
 
@@ -104,6 +114,19 @@ class Audiences:
     def list(cls) -> List["Audiences.AudienceListItem"]:
         resp = Request[Dict[str, Any]](path="/audiences", verb="get").perform_with_content()
         return cast(List["Audiences.AudienceListItem"], resp["data"])
+
+    @classmethod
+    def get(cls, audience_id: str) -> "Audiences.AudienceDetail":
+        return Request[Audiences.AudienceDetail](
+            path=f"/audiences/{audience_id}", verb="get"
+        ).perform_with_content()
+
+    @classmethod
+    def update(cls, audience_id: str, params: "Audiences.UpdateParams") -> "Audiences.Audience":
+        """Rename an audience."""
+        return Request[Audiences.Audience](
+            path=f"/audiences/{audience_id}", params=cast(Dict[str, Any], params), verb="patch"
+        ).perform_with_content()
 
     @classmethod
     def remove(cls, audience_id: str) -> None:
