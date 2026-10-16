@@ -21,7 +21,7 @@ class Broadcasts:
         html: NotRequired[str]
         template_id: NotRequired[str]
         template_variables: NotRequired[Dict[str, str]]
-        # Omit to use the organization default; False always wins over it.
+        # Omit to use the organization default (off unless changed); an explicit value wins.
         track_opens: NotRequired[bool]
         track_clicks: NotRequired[bool]
 

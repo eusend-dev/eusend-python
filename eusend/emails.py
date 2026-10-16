@@ -34,6 +34,8 @@ class _SendParamsDefault(_SendParamsFrom):
     # payloads. Names and values may contain ASCII letters, numbers, underscores and
     # dashes; up to 10 tags per email. Returned on every email.* webhook event.
     tags: NotRequired[Union[Dict[str, str], List[Dict[str, str]]]]
+    # Omit to use the organization default (off unless changed). Click tracking rewrites
+    # links through eusend, which can hurt inbox placement on transactional mail.
     track_opens: NotRequired[bool]
     track_clicks: NotRequired[bool]
     attachments: NotRequired[List[Attachment]]
