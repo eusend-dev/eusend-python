@@ -326,6 +326,8 @@ print(hook["secret"])  # signing secret — returned only once
 eusend.Webhooks.list()
 eusend.Webhooks.get(hook["id"])   # includes recent deliveries
 eusend.Webhooks.update(hook["id"], {"events": ["email.bounced"]})
+eusend.Webhooks.update(hook["id"], {"enabled": True})  # re-enable a paused or auto-disabled endpoint
+eusend.Webhooks.test(hook["id"])  # send a signed webhook.test event
 eusend.Webhooks.remove(hook["id"])
 ```
 

@@ -17,6 +17,11 @@ class Webhooks:
     class UpdateParams(TypedDict):
         url: NotRequired[str]
         events: NotRequired[List[str]]
+        enabled: NotRequired[bool]
+        """``False`` pauses the endpoint; ``True`` re-enables a paused or auto-disabled one."""
+
+    class TestResponse(TypedDict):
+        id: str
 
     class WebhookWithDeliveries(Webhook):
         deliveries: List[WebhookDelivery]
@@ -47,6 +52,14 @@ class Webhooks:
     def update(cls, webhook_id: str, params: "Webhooks.UpdateParams") -> Webhook:
         return Request[Webhook](
             path=f"/webhooks/{webhook_id}", params=cast(Dict[str, Any], params), verb="patch"
+        ).perform_with_content()
+
+    @classmethod
+    def test(cls, webhook_id: str) -> "Webhooks.TestResponse":
+        """Send one signed ``webhook.test`` event to the endpoint. Works on a disabled
+        endpoint, so a fix can be confirmed before enabling it again."""
+        return Request[Webhooks.TestResponse](
+            path=f"/webhooks/{webhook_id}/test", verb="post"
         ).perform_with_content()
 
     @classmethod

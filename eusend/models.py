@@ -162,6 +162,10 @@ class Webhook(TypedDict):
     id: str
     url: str
     events: List[str]
+    # Set when the endpoint stopped receiving events; None while active.
+    disabled_at: Optional[str]
+    # "failing" after three days of failed deliveries, "manual" when paused.
+    disabled_reason: Optional[str]
     created_at: str
 
 
