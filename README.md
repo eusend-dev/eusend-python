@@ -323,6 +323,7 @@ eusend.Emails.send({
 eusend.Templates.list()
 eusend.Templates.get(tpl["id"])
 eusend.Templates.update(tpl["id"], {"subject": "New subject"})
+html = eusend.Templates.preview(tpl["id"], {"first_name": "Alex"})  # rendered HTML
 eusend.Templates.remove(tpl["id"])
 ```
 
@@ -335,13 +336,15 @@ hook = eusend.Webhooks.create({
     "url": "https://yourapp.com/webhooks/eusend",
     "events": ["email.delivered", "email.bounced", "email.complained"],  # or ["*"]
 })
-print(hook["secret"])  # signing secret — returned only once
+print(hook["secret"])  # signing secret — store it securely; get_secret reads it again
 
 eusend.Webhooks.list()
 eusend.Webhooks.get(hook["id"])   # includes recent deliveries
 eusend.Webhooks.update(hook["id"], {"events": ["email.bounced"]})
 eusend.Webhooks.update(hook["id"], {"enabled": True})  # re-enable a paused or auto-disabled endpoint
 eusend.Webhooks.test(hook["id"])  # send a signed webhook.test event
+eusend.Webhooks.get_secret(hook["id"])     # {"secret": ...}
+eusend.Webhooks.rotate_secret(hook["id"])  # new secret, effective immediately
 eusend.Webhooks.remove(hook["id"])
 ```
 

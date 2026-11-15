@@ -23,6 +23,9 @@ class Webhooks:
     class TestResponse(TypedDict):
         id: str
 
+    class SecretResponse(TypedDict):
+        secret: str
+
     class WebhookWithDeliveries(Webhook):
         deliveries: List[WebhookDelivery]
 
@@ -31,7 +34,7 @@ class Webhooks:
         """Create a webhook. Events are ``email.sent``, ``email.delivered``,
         ``email.bounced``, ``email.complained``, ``email.opened``, ``email.clicked``,
         ``email.failed`` and ``email.suppressed``; pass ``{"events": ["*"]}`` to subscribe
-        to every event. The returned ``secret`` is shown only once — store it securely."""
+        to every event. Store the returned ``secret`` securely; ``get_secret`` reads it again."""
         return Request[Webhooks.CreateResponse](
             path="/webhooks", params=cast(Dict[str, Any], params), verb="post"
         ).perform_with_content()
@@ -60,6 +63,21 @@ class Webhooks:
         endpoint, so a fix can be confirmed before enabling it again."""
         return Request[Webhooks.TestResponse](
             path=f"/webhooks/{webhook_id}/test", verb="post"
+        ).perform_with_content()
+
+    @classmethod
+    def get_secret(cls, webhook_id: str) -> "Webhooks.SecretResponse":
+        """The endpoint's current signing secret."""
+        return Request[Webhooks.SecretResponse](
+            path=f"/webhooks/{webhook_id}/secret", verb="get"
+        ).perform_with_content()
+
+    @classmethod
+    def rotate_secret(cls, webhook_id: str) -> "Webhooks.CreateResponse":
+        """Replace the signing secret and return the webhook with the new one. Takes effect
+        immediately — the previous secret stops verifying."""
+        return Request[Webhooks.CreateResponse](
+            path=f"/webhooks/{webhook_id}/rotate-secret", verb="post"
         ).perform_with_content()
 
     @classmethod

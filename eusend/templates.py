@@ -1,7 +1,9 @@
-from typing import Any, Dict, List, cast
+import json
+from typing import Any, Dict, List, Optional, cast
 
 from eusend._compat import NotRequired, TypedDict
 
+from eusend._util import build_query
 from eusend.models import Template
 from eusend.request import Request
 
@@ -50,3 +52,12 @@ class Templates:
     @classmethod
     def remove(cls, template_id: str) -> None:
         Request(path=f"/templates/{template_id}", verb="delete").perform()
+
+    @classmethod
+    def preview(cls, template_id: str, variables: Optional[Dict[str, Any]] = None) -> str:
+        """Render the template with ``variables`` and return the resulting HTML."""
+        query = build_query({"variables": json.dumps(variables)} if variables is not None else None)
+        body = Request(path=f"/templates/{template_id}/preview" + query, verb="get").perform_raw(
+            accept="text/html"
+        )
+        return body.decode("utf-8")
