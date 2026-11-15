@@ -289,6 +289,20 @@ csv = eusend.Suppressions.export()
 
 ---
 
+## Reputation
+
+Your bounce and complaint rates exactly as the sending limits judge them: what counted, what did not, and how far you are from a halved daily limit or a pause. Not available to sending-only keys.
+
+```python
+r = eusend.Reputation.get()
+print(r["state"])  # healthy, warning, limited or paused
+nxt = r["next"]
+if nxt and nxt["bounces"] is not None and nxt["bounces"] <= 3:
+    print(f"{nxt['bounces']} more bounces would move this account to {nxt['state']}")
+```
+
+---
+
 ## Templates
 
 `{{variable}}` placeholders are substituted at send time; values are HTML-escaped.
