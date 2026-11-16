@@ -108,8 +108,9 @@ class Broadcasts:
     def send(
         cls, broadcast_id: str, params: Optional["Broadcasts.SendParams"] = None
     ) -> "Broadcasts.SendResponse":
-        """Send a broadcast now, or schedule it with ``{"scheduled_at": ...}``.
-        Calling send on a paused broadcast resumes it from where it stopped."""
+        """Send a broadcast now, or schedule it with ``{"scheduled_at": ...}`` (ISO 8601,
+        at most 30 days ahead). Calling send on a paused broadcast resumes it from where it
+        stopped."""
         return Request[Broadcasts.SendResponse](
             path=f"/broadcasts/{broadcast_id}/send",
             params=cast(Dict[str, Any], params or {}),
