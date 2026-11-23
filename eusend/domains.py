@@ -60,6 +60,8 @@ class Domains:
 
         ``subdomain`` is the labels below the domain, like ``"in"`` for ``in.example.com``.
         Leave it out to receive on the domain itself, only when nothing else handles its mail.
+        A host whose first label is ``send`` is refused with 400: ``send.<domain>`` is the
+        Return-Path host for bounces.
         Returns the MX record to publish; mail starts arriving once it resolves. Not
         available to test keys.
         Requires a paid plan or admin receiving grant. Disabled or held workspaces get 403 FORBIDDEN.
