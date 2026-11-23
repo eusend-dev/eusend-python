@@ -183,7 +183,7 @@ the content with `Inbound.get`.
 ```python
 print(eusend.Inbound.address()["address"])  # anything@3e44228d8f38.eusend.app
 
-page = eusend.Inbound.list({"limit": 20})
+page = eusend.Inbound.list({"limit": 20, "order": "asc"})
 email = eusend.Inbound.get(page["data"][0]["id"])
 print(email["subject"], email["authentication"]["dmarc"]["result"], email["reply_to_email_id"])
 

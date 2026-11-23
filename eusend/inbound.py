@@ -86,6 +86,8 @@ class Inbound:
         created_at: str
 
     class ListParams(TypedDict, total=False):
+        #: Received time: desc (newest first, default) or asc (oldest first). Keep it unchanged while paging.
+        order: Literal["asc", "desc"]
         #: 1–100, default 10.
         limit: int
         cursor: str
@@ -103,7 +105,7 @@ class Inbound:
 
     @classmethod
     def list(cls, params: Optional["Inbound.ListParams"] = None) -> "Inbound.ListResponse":
-        """Received mail, newest first."""
+        """Received mail, newest first by default. Pass order='asc' for oldest first."""
         path = "/inbound" + build_query(cast(Optional[Dict[str, Any]], params))
         return Request[Inbound.ListResponse](path=path, verb="get").perform_with_content()
 
