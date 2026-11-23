@@ -19,9 +19,10 @@ class Inbound:
         host: str
         #: An example address, ``anything@<host>``.
         address: str
-        #: ``paid_plan_required`` on the free plan; ``on_hold`` while the account is under
-        #: review, when mail is deferred rather than refused.
-        status: Literal["active", "paid_plan_required", "on_hold"]
+        #: ``paid_plan_required`` when the plan does not include receiving; ``on_hold``
+        #: while the account is under review; ``disabled`` when an admin disabled receiving.
+        #: Held or disabled receiving defers new mail.
+        status: Literal["active", "paid_plan_required", "on_hold", "disabled"]
         active: bool
 
     class Attachment(TypedDict):
