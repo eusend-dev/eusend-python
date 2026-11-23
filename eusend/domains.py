@@ -62,6 +62,7 @@ class Domains:
         Leave it out to receive on the domain itself, only when nothing else handles its mail.
         Returns the MX record to publish; mail starts arriving once it resolves. Not
         available to test keys.
+        Requires a paid plan or admin receiving grant. Disabled or held workspaces get 403 FORBIDDEN.
         """
         params: Dict[str, Any] = {} if subdomain is None else {"subdomain": subdomain}
         return Request[DomainInbound](
