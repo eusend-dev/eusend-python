@@ -1,8 +1,8 @@
-from typing import List
+from typing import Any, Dict, List, Optional
 
 from eusend._compat import TypedDict
 
-from eusend.models import Domain, DnsRecord
+from eusend.models import Domain, DnsRecord, DomainInbound
 from eusend.request import Request
 
 
@@ -53,3 +53,22 @@ class Domains:
         return Request[Domains.RemoveResponse](
             path=f"/domains/{domain_id}", verb="delete"
         ).perform_with_content()
+
+    @classmethod
+    def enable_inbound(cls, domain_id: str, subdomain: Optional[str] = None) -> DomainInbound:
+        """Receive mail on a verified domain or a subdomain of it.
+
+        ``subdomain`` is the labels below the domain, like ``"in"`` for ``in.example.com``.
+        Leave it out to receive on the domain itself, only when nothing else handles its mail.
+        Returns the MX record to publish; mail starts arriving once it resolves. Not
+        available to test keys.
+        """
+        params: Dict[str, Any] = {} if subdomain is None else {"subdomain": subdomain}
+        return Request[DomainInbound](
+            path=f"/domains/{domain_id}/inbound", params=params, verb="put"
+        ).perform_with_content()
+
+    @classmethod
+    def disable_inbound(cls, domain_id: str) -> None:
+        """Stop receiving mail on the domain. Mail already received is kept."""
+        Request(path=f"/domains/{domain_id}/inbound", verb="delete").perform()

@@ -39,6 +39,7 @@ from eusend.webhooks import Webhooks  # noqa: E402
 from eusend.broadcasts import Broadcasts  # noqa: E402
 from eusend.suppressions import Suppressions  # noqa: E402
 from eusend.reputation import Reputation  # noqa: E402
+from eusend.inbound import Inbound  # noqa: E402
 
 from eusend.exceptions import (  # noqa: E402
     ApplicationError,
@@ -71,6 +72,7 @@ __all__ = [
     "Broadcasts",
     "Suppressions",
     "Reputation",
+    "Inbound",
     "EusendError",
     "ApplicationError",
     "InvalidApiKeyError",

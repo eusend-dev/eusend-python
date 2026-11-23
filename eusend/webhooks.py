@@ -33,7 +33,8 @@ class Webhooks:
     def create(cls, params: "Webhooks.CreateParams") -> "Webhooks.CreateResponse":
         """Create a webhook. Events are ``email.sent``, ``email.delivered``,
         ``email.bounced``, ``email.complained``, ``email.opened``, ``email.clicked``,
-        ``email.failed`` and ``email.suppressed``; pass ``{"events": ["*"]}`` to subscribe
+        ``email.failed``, ``email.suppressed`` and ``email.received``; pass
+        ``{"events": ["*"]}`` to subscribe
         to every event. Store the returned ``secret`` securely; ``get_secret`` reads it again."""
         return Request[Webhooks.CreateResponse](
             path="/webhooks", params=cast(Dict[str, Any], params), verb="post"

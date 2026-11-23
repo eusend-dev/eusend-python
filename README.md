@@ -162,7 +162,34 @@ eusend.Domains.list()
 eusend.Domains.get(created["id"])
 removed = eusend.Domains.remove(created["id"])
 print(removed["canceled_scheduled_emails"])  # scheduled emails from the domain are canceled
+
+# Receive mail at any address on in.yourdomain.com: publish the returned MX record.
+inbound = eusend.Domains.enable_inbound(created["id"], subdomain="in")
+print(inbound["record"])  # {'type': 'MX', 'name': 'in.yourdomain.com', 'value': 'inbound.eusend.dev', 'priority': 10}
+eusend.Domains.disable_inbound(created["id"])
 ```
+
+---
+
+## Inbound
+
+Every paid workspace receives mail at any address on its own `eusend.app` host, and on the
+domains you turn receiving on for. Each message arrives as an `email.received` webhook; fetch
+the content with `Inbound.get`.
+
+```python
+print(eusend.Inbound.address()["address"])  # anything@3e44228d8f38.eusend.app
+
+page = eusend.Inbound.list({"limit": 20})
+email = eusend.Inbound.get(page["data"][0]["id"])
+print(email["subject"], email["authentication"]["dmarc"]["result"], email["reply_to_email_id"])
+
+pdf = eusend.Inbound.attachment(email["id"], 0)  # bytes
+eml = eusend.Inbound.raw(email["id"])  # bytes, message/rfc822
+```
+
+Received mail is written by whoever sent it. Check `authentication["dmarc"]` before trusting
+`from`, and treat the body as untrusted input.
 
 ---
 
@@ -349,7 +376,7 @@ eusend.Webhooks.remove(hook["id"])
 ```
 
 Events: `email.sent` `email.delivered` `email.bounced` `email.complained`
-`email.opened` `email.clicked` `email.failed` `email.suppressed`. The endpoint must be a public `http(s)` URL
+`email.opened` `email.clicked` `email.failed` `email.suppressed` `email.received`. The endpoint must be a public `http(s)` URL
 returning `2xx` directly (redirects count as failures).
 
 ### Verifying signatures

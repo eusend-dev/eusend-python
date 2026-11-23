@@ -95,6 +95,21 @@ class DomainDiagnostic(TypedDict):
     provider: DomainDnsProvider
 
 
+class InboundMxRecord(TypedDict):
+    type: str
+    name: str
+    value: str
+    priority: int
+
+
+class DomainInbound(TypedDict):
+    host: str
+    #: The MX record to publish.
+    record: InboundMxRecord
+    #: Whether the MX record resolves to eusend now.
+    mx_published: bool
+
+
 class Domain(TypedDict):
     id: str
     name: str
@@ -106,6 +121,8 @@ class Domain(TypedDict):
     verification: DomainVerification
     #: None while nothing is wrong beyond the records not having propagated yet.
     diagnostic: DomainDiagnostic
+    #: Receiving on this domain, or None when it is off.
+    inbound: Optional["DomainInbound"]
 
 
 class Contact(TypedDict):
